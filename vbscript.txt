@@ -1,0 +1,71 @@
+Function Main()
+
+Dim connStr, objConn, getNames ,sql
+
+Set myRegExp = New RegExp
+myRegExp.IgnoreCase = True
+myRegExp.Global = True
+myRegExp.Pattern = "(\w+\/\d+).*(up|down)$"
+for each match in myRegExp.execute(Fields.VarCleanMessageText)
+Fields.VarCustom01 = match.SubMatches(0)
+Fields.VarCustom02 = match.SubMatches(1)
+Next
+'set myRegExp = Nothing
+if myRegExp.Test ( Fields.VarCleanMessageText ) then
+	connStr = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=C:\test.mdb"
+ 
+'Define object type
+	Set objConn = CreateObject("ADODB.Connection")
+ 
+'Open Connection
+	objConn.open connStr
+	sql = "SELECT device_conn FROM register where interface = '" & Fields.VarCustom01 & "'"
+'Define recordset and SQL query
+	Set rs = objConn.execute(sql)
+
+ 'While loop, loops through all available results
+DO WHILE NOT rs.EOF
+'add names seperated by comma to getNames
+	getNames = rs.Fields(0)
+'move to next result before looping again
+'this is important
+	rs.MoveNext
+'continue loop
+	Loop
+ 
+'Close connection and release objects
+	objConn.Close
+	Set rs = Nothing
+	Set objConn = Nothing
+ 
+'Return Results via MsgBox
+	Fields.VarCustom03 = getNames
+'check if variable is empty
+	If (IsEmpty(Fields.VarCustom03)) then
+	Fields.VarCustom03 = "N/A"
+	'Generate mail 
+	MailTo = "amelinte@cic.es"
+	MailFrom = "Kiwi-CIC@cic.es"
+	MailSubject = Fields.VarPeerName & "-" & Fields.VarCustom01 & " " & Fields.VarCustom02 & "  " & Fields.VarCustom03
+	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
+	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
+
+	else
+'Generate email with the data from BD
+	MailTo = "amelinte@cic.es"
+	MailFrom = "Kiwi-CIC@cic.es"
+	MailSubject = Fields.VarPeerName & "-" & Fields.VarCustom01 & " " & Fields.VarCustom02 & "  " & Fields.VarCustom03
+	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
+	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
+	end if
+else 
+'Generate email if no match found 
+	MailTo = "amelinte@cic.es"
+	MailFrom = "Kiwi-CIC@cic.es"
+	MailSubject = Fields.VarPeerName & "-" & "Data mismatch"
+	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
+	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
+end if
+
+Main = "OK"
+End Function
