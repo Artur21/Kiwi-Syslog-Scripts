@@ -44,24 +44,24 @@ DO WHILE NOT rs.EOF
 	If (IsEmpty(Fields.VarCustom03)) then
 	Fields.VarCustom03 = "N/A"
 	'Generate mail 
-	MailTo = "amelinte@cic.es"
-	MailFrom = "Kiwi-CIC@cic.es"
+	MailTo = "xxx@cxxc.xxx"
+	MailFrom = "xxx@xxx.xx"
 	MailSubject = Fields.VarPeerName & "-" & Fields.VarCustom01 & " " & Fields.VarCustom02 & "  " & Fields.VarCustom03
 	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
 	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
 
 	else
 'Generate email with the data from BD
-	MailTo = "amelinte@cic.es"
-	MailFrom = "Kiwi-CIC@cic.es"
+	MailTo = "xxxx@xxx.xx"
+	MailFrom = "xxxx@xxx.xx"
 	MailSubject = Fields.VarPeerName & "-" & Fields.VarCustom01 & " " & Fields.VarCustom02 & "  " & Fields.VarCustom03
 	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
 	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
 	end if
 else 
 'Generate email if no match found 
-	MailTo = "amelinte@cic.es"
-	MailFrom = "Kiwi-CIC@cic.es"
+	MailTo = "xxxe@xx.xx"
+	MailFrom = "xxxxC@cxxx.xx"
 	MailSubject = Fields.VarPeerName & "-" & "Data mismatch"
 	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
 	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
