@@ -1,25 +1,28 @@
 Function Main()
 
 Dim connStr, objConn, getNames ,sql
-
 Set myRegExp = New RegExp
 myRegExp.IgnoreCase = True
 myRegExp.Global = True
-myRegExp.Pattern = "(\w+\/\d+).*(up|down)$"
+myRegExp.Pattern = "(\w+\/\d+\/\d+|\w+\/\d+|[a-zA-Z]+[0-9]+).*(up|down)$"
 for each match in myRegExp.execute(Fields.VarCleanMessageText)
 Fields.VarCustom01 = match.SubMatches(0)
 Fields.VarCustom02 = match.SubMatches(1)
-Next
+next
 'set myRegExp = Nothing
+myregexp.Pattern = "(\w{2})[a-zA-Z]+(.*)"
+for each match in myregexp.execute(Fields.VarCustom01)
+Fields.VarCustom04 = match.SubMatches(0) &"."& match.SubMatches(1)
+Next
 if myRegExp.Test ( Fields.VarCleanMessageText ) then
-	connStr = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=C:\test.mdb"
+	connStr = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=C:\db\cic-chasis.mdb"
  
 'Define object type
 	Set objConn = CreateObject("ADODB.Connection")
  
 'Open Connection
 	objConn.open connStr
-	sql = "SELECT device_conn FROM register where interface = '" & Fields.VarCustom01 & "'"
+	sql = "SELECT device_conn FROM interface where interface = '" & Fields.VarCustom01 & "' and dev_name = '" & Fields.VarPeerName & "'" 
 'Define recordset and SQL query
 	Set rs = objConn.execute(sql)
 
@@ -34,35 +37,34 @@ DO WHILE NOT rs.EOF
 	Loop
  
 'Close connection and release objects
-	objConn.Close
-	Set rs = Nothing
-	Set objConn = Nothing
- 
-'Return Results via MsgBox
-	Fields.VarCustom03 = getNames
+objConn.Close
+Set rs = Nothing
+Set objConn = Nothing
+
+Fields.VarCustom03 = getNames
 'check if variable is empty
 	If (IsEmpty(Fields.VarCustom03)) then
 	Fields.VarCustom03 = "N/A"
 	'Generate mail 
-	MailTo = "xxxxx@xx.xx"
-	MailFrom = "xxxx@xxxx.xxx"
-	MailSubject = Fields.VarPeerName & "-" & Fields.VarCustom01 & " " & Fields.VarCustom02 & "  " & Fields.VarCustom03
+	MailTo = "xxxxxxxxx"
+	MailFrom = "xxxxxxxxxx"
+	MailSubject = Fields.VarPeerName & " - " & Fields.VarCustom04 & " - " & Fields.VarCustom02 & "  " & Fields.VarCustom03
 	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
 	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
 
 	else
 'Generate email with the data from BD
-	MailTo = "xxxxx@xxxxx.xxx"
-	MailFrom = "xxxx@xxxx.xx"
-	MailSubject = Fields.VarPeerName & "-" & Fields.VarCustom01 & " " & Fields.VarCustom02 & "  " & Fields.VarCustom03
+	MailTo = "xxxxxxxx"
+	MailFrom = "xxxxxxxx"
+	MailSubject = Fields.VarPeerName & " - " & Fields.VarCustom04 & " - " & Fields.VarCustom02 & "  " & Fields.VarCustom03 
 	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
 	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
 	end if
 else 
 'Generate email if no match found 
-	MailTo = "xxxxxx@xxxx.xx"
-	MailFrom = "xxxx@xxx.xxx"
-	MailSubject = Fields.VarPeerName & "-" & "Data mismatch"
+	MailTo = "xxxxxxxxx"
+	MailFrom = "xxxxxxxxx"
+	MailSubject = Fields.VarPeerName & " - " & "Data mismatch"
 	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
 	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
 end if
