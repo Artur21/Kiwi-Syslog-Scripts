@@ -22,8 +22,9 @@ for each match in myregexp.execute(Fields.VarCustom01)
 'concat the result (ex:  (ex:Gi.1/1 down)
 Fields.VarCustom04 = match.SubMatches(0) &"."& match.SubMatches(1)
 Next
-'check if match found in the log if found open file.mdb and execute a sql querry
+'check if match is true 
 if myRegExp.Test ( Fields.VarCleanMessageText ) then
+'define data source
 	connStr = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=C:\db\cic-chasis.mdb"
  
 'Define object type
