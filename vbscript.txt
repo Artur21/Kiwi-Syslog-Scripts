@@ -9,7 +9,7 @@ myRegExp.Global = True
 '2378: Jan 25 18:15:35: %LINK-3-UPDOWN: Interface GigabitEthernet1/1, changed state to down
 '2378: Jan 25 18:15:35: %LINK-3-UPDOWN: Interface Serial0/0:0,changed state to down
 '2378: Jan 25 18:15:35: %LINK-3-UPDOWN: Interface GigabitEthernet1/1/1, changed state to dow
-myRegExp.Pattern = "(\w+\/\d+\:\d+|\w+\/\d+\/\d+|\w+\/\d+|port\b\s+\d+).*(up|down|off-line|on-line)$"
+myRegExp.Pattern = "(\w+\d+\/\d+\:\d+|\w+\d+\/\d+\/\d+|\w+\d+\/\d+|port\b\s+\d+).*(up|down|off-line|on-line)$"
 for each match in myRegExp.execute(Fields.VarCleanMessageText)
 'for each match asign to a variable
 Fields.VarCustom01 = match.SubMatches(0)
