@@ -49,7 +49,7 @@ Fields.VarCustom03 = getNames
 	MailTo = "xxxxx@cxxxx"
 	MailFrom = "xxxxxx@xxxxx"
 	MailSubject = Fields.VarPeerName & " - " & Fields.VarCustom04 & Fields.VarCustom05  & " - " & Fields.VarCustom02 & " - " & Fields.VarCustom03
-	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
+	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Sent by " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
 	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
 
 	else
@@ -57,15 +57,15 @@ Fields.VarCustom03 = getNames
 	MailTo = "xxxxx@xxxx"
 	MailFrom = "xxxxx@xxxx"
 	MailSubject = Fields.VarPeerName & " - " & Fields.VarCustom04 & Fields.VarCustom05  & " - " & Fields.VarCustom02 & " - " & Fields.VarCustom03 
-	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
+	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Sent by " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
 	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
 	end if
 else 
-'Generate email if no match found 
+'Generate email if no match found with regexp and sent the log message to review
 	MailTo = "xxxxxx@xxxxx"
 	MailFrom = "xxxxx@xxxxx"
 	MailSubject = Fields.VarPeerName & " - " & "Data mismatch"
-	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
+	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Sent by " & " " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
 	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
 end if
 
