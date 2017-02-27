@@ -1,0 +1,45 @@
+Function Main()
+
+Dim connStr, objConn
+Set myRegExp = New RegExp
+myRegExp.IgnoreCase = True
+myRegExp.Pattern = "(Interface)\s(.*)\s(left|joined)\s(port-channel)\s(.*)"
+for each match in myRegExp.execute(Fields.VarCleanMessageText)
+Fields.VarCustom01 = match.SubMatches(1)
+Fields.VarCustom02 = match.SubMatches(2)
+Fields.VarCustom03 = match.SubMatches(4)
+next
+
+if myRegExp.Test ( Fields.VarCleanMessageText ) then
+	myregexp.Pattern = "(\w{2})([A-Za-z]+)(.*)"
+for each match in myregexp.execute(Fields.VarCustom01)
+	Fields.VarCustom04 = match.SubMatches(0) &"."& match.SubMatches(2)
+Next
+	myregexp.Pattern = "(\w{2})\w+\-[A-Za-z]+(\d)"
+for each match in myregexp.execute(Fields.VarCustom03)
+	Fields.VarCustom05 = match.SubMatches(0) & match.SubMatches(1)
+Next
+'Generate mail 
+	MailTo = "xxxxx@xxx.xx"
+	MailFrom = "kiwi@viesgoesn.com"
+	MailSubject = Fields.VarPeerName & " - "  & Fields.VarCustom04 &" - "& Fields.VarCustom02 &" - "& 
+
+Fields.VarCustom05
+	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & 
+
+" " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
+	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
+
+else 
+'Generate email if no match found 
+	MailTo = "xxxxxx@xxx.xx"
+	MailFrom = "kiwi@viesgoesn.com"
+	MailSubject = Fields.VarPeerName & " - " & "Data mismatch"
+	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & 
+
+" " & Fields.VarPeerName & " " & " - "  & " " & VarPeerAddress  & vbCrLf & "---------------------" 
+	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
+end if
+set myRegExp = Nothing
+Main = "OK"
+End Function
