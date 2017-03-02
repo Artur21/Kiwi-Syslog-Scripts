@@ -21,7 +21,7 @@ for each match in myregexp.execute(Fields.VarCustom03)
 Next
 'Generate mail 
 	MailTo = "xxxxx@xxx.xx"
-	MailFrom = "kiwi@viesgoesn.com"
+	MailFrom = "xxx@vxxxx.xxxx"
 	MailSubject = Fields.VarPeerName & " - "  & Fields.VarCustom04 &" - "& Fields.VarCustom02 &" - "& 
 
 Fields.VarCustom05
@@ -33,7 +33,7 @@ Fields.VarCustom05
 else 
 'Generate email if no match found 
 	MailTo = "xxxxxx@xxx.xx"
-	MailFrom = "kiwi@viesgoesn.com"
+	MailFrom = "xxx@vxxxxxxxxn.xxxx"
 	MailSubject = Fields.VarPeerName & " - " & "Data mismatch"
 	MailMessage = Fields.VarCleanMessageText  & vbCrLf & "---------------------" & vbCrLf & "Enviado por " & 
 
