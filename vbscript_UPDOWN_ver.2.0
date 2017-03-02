@@ -4,10 +4,12 @@ Dim connStr, objConn, getNames ,sql
 Set myRegExp = New RegExp
 myRegExp.IgnoreCase = True
 myRegExp.Global = True
-myRegExp.Pattern = "^(RT)"
+'define regexp to match first two letters of the source "RT" in my case RT = router; ex: RT-ADSL-ROUTER1
+myRegExp.Pattern = "^(RT|rt)"
 for each match in myRegExp.execute(Fields.VarPeerName)
 Fields.VarCustom06 = match.SubMatches(0)
 next
+'if first two letters from SOURCE is "RT" execute this coombaya ; will parse events : "LINK" and "LINEPROTO"
 if myRegExp.Test(Fields.VarPeerName) then
 	myRegExp.Pattern = "(Interface|Controller)\s(.*?),.*(up|down)"
 	for each match in myRegExp.execute(Fields.VarCleanMessageText)
@@ -74,6 +76,7 @@ else
 	Call Fields.ActionSendEmail(MailTo, MailFrom, MailSubject, MailMessage)
 	end if
 else
+'if the two letters are not "RT",  this will parse only event "LINK".
 myRegExp.Pattern = "%(LINK).*(Interface|Controller)\s(.*?),.*(up|down)"
 	for each match in myRegExp.execute(Fields.VarCleanMessageText)
 	Fields.VarCustom01 = match.SubMatches(2)
