@@ -9,7 +9,7 @@ myRegExp.Pattern = "^(RT|rt)"
 for each match in myRegExp.execute(Fields.VarPeerName)
 Fields.VarCustom06 = match.SubMatches(0)
 next
-'if first two letters from SOURCE is "RT" execute this coombaya ; will parse events : "LINK" and "LINEPROTO"
+'if first two letters from SOURCE is "RT" execute this kumbaya ; will parse events : "LINK" and "LINEPROTO"
 if myRegExp.Test(Fields.VarPeerName) then
 	myRegExp.Pattern = "(Interface|Controller)\s(.*?),.*(up|down)"
 	for each match in myRegExp.execute(Fields.VarCleanMessageText)
